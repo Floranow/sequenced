@@ -45,7 +45,7 @@ module Sequenced
           mattr_accessor :sequenced_options, instance_accessor: false
           self.sequenced_options = []
 
-          around_save :set_sequential_ids
+          before_save :set_sequential_ids
         end
 
         options = DEFAULT_OPTIONS.merge(options)
@@ -65,6 +65,7 @@ module Sequenced
 
     module InstanceMethods
       def set_sequential_ids
+        init_sequential_scope if self.class.respond_to?('init_sequential_scope')
         self.class.base_class.sequenced_options.each do |options|
           Sequenced::Generator.new(self, options).set
         end
