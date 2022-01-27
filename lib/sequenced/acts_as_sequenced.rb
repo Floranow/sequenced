@@ -45,13 +45,13 @@ module Sequenced
           mattr_accessor :sequenced_options, instance_accessor: false
           self.sequenced_options = []
 
-          before_save :set_sequential_ids
+          around_save :set_sequential_ids
         end
 
         options = DEFAULT_OPTIONS.merge(options)
         column_name = options[:column]
 
-        if sequenced_options.any? {|options| options[:column] == column_name}
+        if sequenced_options.any? { |options| options[:column] == column_name }
           raise(SequencedColumnExists, <<-MSG.squish)
             Tried to set #{column_name} as sequenced but there was already a
             definition here. Did you accidentally call acts_as_sequenced
