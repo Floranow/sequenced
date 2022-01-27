@@ -65,7 +65,7 @@ module Sequenced
 
     module InstanceMethods
       def set_sequential_ids
-        init_sequential_scope if self.class.respond_to?('init_sequential_scope')
+        init_sequential_scope if respond_to?('init_sequential_scope')
         self.class.base_class.sequenced_options.each do |options|
           Sequenced::Generator.new(self, options).set
         end
